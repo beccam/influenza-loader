@@ -12,24 +12,28 @@ import com.datastax.driver.core.Session;
 public class InfluenzaLoader {
 
 	public static void main(String[] args) throws Exception {
-
+		
+        //Checks for legitimate file name
 		if (args.length < 1) {
 			System.out.println("No file name: InfluenzaLoader <filename>");
 			System.exit(0);
 		}
-
+        
 		ICsvBeanReader beanReader = null;
 		try {
 			beanReader = new CsvBeanReader(new FileReader(args[0]),
 					CsvPreference.TAB_PREFERENCE);
 
 			beanReader.getHeader(true);
-
+			
+            //"null" for skipped columns in text file
 			final String[] header = new String[] { "strain_id", "subtype",
 					"collection_date", "state", null, null, null, "age", null,
 					null, null, null };
 
 			Session session = SimpleClient.getInstance();
+			
+			
 			PreparedStatement statement_year_subtype = session.prepare(
 
 			"INSERT INTO influenza.year_subtype"
